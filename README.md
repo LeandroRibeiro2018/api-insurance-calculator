@@ -159,6 +159,15 @@ public class BeanConfig {
 }
 
 ```
+## <a name="executando-a-aplicacao">7. Imagens de testes </a>
+### POST
+![Descrição da imagem](./src/main/resources/images/envio.png)
+### GET
+![Descrição da imagem](./src/main/resources/images/envio.png)
+
+### TESTE CUCUMBER
+![Descrição da imagem](./src/main/resources/images/cucumber.png)
+
 Com essas explicações, esperamos que fique claro o motivo das escolhas arquiteturais e de design no projeto.
 
 
