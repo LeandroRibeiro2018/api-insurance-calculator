@@ -163,7 +163,7 @@ public class BeanConfig {
 ### POST
 ![Descrição da imagem](./src/main/resources/images/envio.png)
 ### GET
-![Descrição da imagem](./src/main/resources/images/envio.png)
+![Descrição da imagem](./src/main/resources/images/lista.png)
 
 ### TESTE CUCUMBER
 ![Descrição da imagem](./src/main/resources/images/cucumber.png)
