@@ -16,14 +16,10 @@
             - [input](#input)
     - [2. Estrutura do Projeto](#2-estrutura-do-projeto)
     - [3. Configuração do Banco de Dados H2](#3-configuração-do-banco-de-dados-h2)
-    - [4. Dependências do Maven](#4-dependências-do-maven)
-    - [5. Implementação](#5-implementação)
-        - [Classe Principal](#classe-principal)
-    - [7. Executando a Aplicação](#7-executando-a-aplicação)
-    - [8. Executando os Testes](#8-executando-os-testes)
-    - [9. Conclusão](#9-conclusão)
-    - [Explicação Teórica](#explicação-teórica)
-    - [Utilização da Classe BeanConfig](#utilização-da-classe-beanconfig)
+    - [4. Executando a Aplicação](#7-executando-a-aplicação)
+    - [5. Explicação Teórica](#explicação-teórica)
+    - [6.Utilização da Classe BeanConfig](#utilização-da-classe-beanconfig)
+    - [7. Imagens de testes](#7-imagens-de-testes)
 
 ## <a name="introducao">1. Introdução</a>
 A proposta da aplicação é disponibilizar a uma pessoa as modalidades de seguro que melhor se encaixam com seu perfil de acordo com algumas variáveis. Abaixo seguem as regras de negócio relacionadas ao seguro de acordo com o valor do veículo:
@@ -52,8 +48,8 @@ A aplicação deve receber como entrada essas informações:
 ```
 E deve responder essas informações:
 
-output
-```
+### output
+```json
 {
   "customer": {
     "name": "João",
@@ -162,6 +158,9 @@ public class BeanConfig {
 ## <a name="executando-a-aplicacao">7. Imagens de testes </a>
 ### POST
 ![Descrição da imagem](./src/main/resources/images/envio.png)
+
+##  SP
+![Descrição da imagem](./src/main/resources/images/envio1.png)
 ### GET
 ![Descrição da imagem](./src/main/resources/images/lista.png)
 
