@@ -1,15 +1,10 @@
 package stepdefs;
 
-import com.desafio.api_insurance_calculator.adapter.dto.CustomerRequest;
-import com.desafio.api_insurance_calculator.adapter.mapper.CustomerMapper;
-import com.desafio.api_insurance_calculator.core.domain.Customer;
-import com.desafio.api_insurance_calculator.core.port.CustomerServicePort;
+import com.desafio.api_insurance_calculator.domain.dto.CustomerRequest;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.stereotype.Component;
 
 import static org.junit.Assert.assertEquals;
 
