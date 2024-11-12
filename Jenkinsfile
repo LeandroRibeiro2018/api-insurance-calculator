@@ -22,7 +22,7 @@ try{
             }
 
             stage('Deploy docker'){
-                    echo "Docker Image Tag Name: ${dockerImageTag}"
+                    echo "Docker Image Tag Name: ${dockerImage}"
                     sh "docker stop ${dockerImage} || true && docker rm ${dockerImage} || true"
                   sh "docker run --name ${imageName} -d -p ${portNumber}:${portNumber} ${imageName}:${env.BUILD_NUMBER}"
             }
