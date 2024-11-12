@@ -13,6 +13,6 @@ FROM openjdk:17-jdk-alpine
 COPY --from=build /app/target/api-insurance-calculator-0.0.1-SNAPSHOT.jar app.jar
 
 
-ENV PORT 8080
+ENV PORT 8085
 EXPOSE $PORT
 ENTRYPOINT ["java","-jar","-Xmx1024M","-Dserver.port=${PORT}","app.jar"]

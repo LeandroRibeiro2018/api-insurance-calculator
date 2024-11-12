@@ -2,7 +2,7 @@ node {
     def WORKSPACE = "/var/lib/jenkins/workspace/api-insurance-calculator"
     def dockerImageTag = "api-insurance-calculator:${env.BUILD_NUMBER}"
     def imageName = "api-insurance-calculator" // Nome da aplicação
-    def portNumber = "8080" // Porta da aplicação
+    def portNumber = "8085" // Porta da aplicação
 
 
 try{
