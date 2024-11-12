@@ -24,7 +24,7 @@ try{
             stage('Deploy docker'){
                     echo "Docker Image Tag Name: ${dockerImageTag}"
                     sh "docker stop ${imageName} || true && docker rm ${imageName} || true"
-                  sh "docker run --name ${imageName} -d -p ${portNumber}:${portNumber} ${imageName}:${env.BUILD_NUMBER}"
+                    sh "docker run --name ${imageName} -d -p ${portNumber}:${portNumber} ${imageName}:${env.BUILD_NUMBER}"
             }
 }catch(e){
     currentBuild.result = "FAILED"
