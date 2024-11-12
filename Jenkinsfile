@@ -17,14 +17,13 @@ try{
      }
       stage('Build docker') {
                   // Read port number and image name from application.yml
-
                    dockerImage = docker.build("${imageName}:${env.BUILD_NUMBER}")
             }
 
-            stage('Deploy docker'){
+      stage('Deploy docker'){
                     echo "Docker Image Tag Name: ${imageName}"
                     sh "docker stop ${imageName} || true && docker rm ${imageName} || true"
-                  sh "docker run --name ${imageName} -d -p ${portNumber}:${portNumber} ${imageName}:${env.BUILD_NUMBER}"
+                    sh "docker run --name ${imageName} -d -p ${portNumber}:${portNumber} ${imageName}:${env.BUILD_NUMBER}"
             }
 }catch(e){
     currentBuild.result = "FAILED"
