@@ -1,18 +1,18 @@
-FROM maven:3.8.3-openjdk-17 As build
-
-# Copy folder in docker
-WORKDIR /app
-
-COPY . .
+# Etapa de construção
+FROM maven:3.8.4-openjdk-17 AS build
+# Copiar o código-fonte para o contêiner
+WORKDIR /opt/app
+COPY ./ /opt/app
+# Compilar o código-fonte
 RUN mvn clean install -DskipTests
-
-
-# Run spring boot in Docker
-FROM openjdk:17-jdk-alpine
-
-COPY --from=build /app/target/api-insurance-calculator-0.0.1-SNAPSHOT.jar app.jar
-
-
-ENV PORT 8085
+# Etapa de produção
+FROM openjdk:19-jdk-alpine
+# Copiar o JAR compilado da etapa de construção
+COPY --from=build /opt/app/target/*.jar app.jar
+# Definir variáveis de ambiente
+ENV PORT=8085
+ENV API_NAME="api-insurance-calculator"
+# Expor a porta
 EXPOSE $PORT
-ENTRYPOINT ["java","-jar","-Xmx1024M","-Dserver.port=${PORT}","app.jar"]
+# Executar a aplicação
+ENTRYPOINT ["java", "-jar", "-Xmx512M", "-Dserver.port=${PORT}", "-Dapi.name=${API_NAME}", "app.jar"]
