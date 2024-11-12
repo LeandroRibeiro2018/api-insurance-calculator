@@ -1,61 +1,82 @@
-node {
-    def WORKSPACE = "/var/lib/jenkins/workspace/api-insurance-calculator"
-    def dockerImageTag = "api-insurance-calculator:${env.BUILD_NUMBER}"
-    def imageName = "api-insurance-calculator" // Nome da aplicação
-    def portNumber = "8085" // Porta da aplicação
+pipeline {
+    agent any
 
+    environment {
+        WORKSPACE_DIR = "/var/lib/jenkins/workspace/api-insurance-calculator"
+        PORT_NUMBER = "8085" // Porta da aplicação
+    }
 
-try{
-     notifyBuild('STARTED')
-
-     stage('Clone Repo') {
-        // for display purposes
-        // Get some code from a GitHub repository
-        git url: 'https://github.com/LeandroRibeiro2018/api-insurance-calculator.git',
-            credentialsId: 'tokenGithub',
-            branch: 'main'
-     }
-      stage('Build docker') {
-                  // Read port number and image name from application.yml
-
-                   dockerImage = docker.build("${imageName}:${env.BUILD_NUMBER}")
+    stages {
+        stage('Notificar Início') {
+            steps {
+                script {
+                    notifyBuild('STARTED')
+                }
             }
+        }
 
-            stage('Deploy docker'){
-                    echo "Docker Image Tag Name: ${dockerImageTag}"
-                   // sh "docker stop ${imageName} || true && docker rm ${imageName} || true"
-                  sh "docker run --name ${imageName} -d -p ${portNumber}:${portNumber} ${imageName}:${env.BUILD_NUMBER}"
+        stage('Clonar Repositório') {
+            steps {
+                git url: 'https://github.com/LeandroRibeiro2018/api-insurance-calculator.git',
+                    credentialsId: 'tokenGithub',
+                    branch: 'main'
             }
-}catch(e){
-    currentBuild.result = "FAILED"
-    throw e
-}finally{
-    notifyBuild(currentBuild.result)
- }
+        }
+
+        stage('Compilar Aplicação') {
+            steps {
+                script {
+                    echo "Compilando aplicação Spring Boot..."
+                    sh "mvn -f ${WORKSPACE_DIR}/pom.xml clean package -DskipTests"
+                }
+            }
+        }
+
+        stage('Iniciar Aplicação') {
+            steps {
+                script {
+                    echo "Iniciando aplicação na porta ${PORT_NUMBER}..."
+                    // Verifica se a aplicação já está em execução e para, se necessário
+                    sh "lsof -t -i:${PORT_NUMBER} | xargs kill -9 || true"
+                    // Inicia a aplicação
+                    sh "nohup java -jar ${WORKSPACE_DIR}/target/*.jar --server.port=${PORT_NUMBER} &"
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            script {
+                notifyBuild(currentBuild.result ?: 'SUCCESS')
+            }
+        }
+        failure {
+            script {
+                currentBuild.result = 'FAILURE'
+                notifyBuild('FAILURE')
+            }
+        }
+    }
 }
 
-def notifyBuild(String buildStatus = 'STARTED'){
-
-// build status of null means successful
-  buildStatus =  buildStatus ?: 'SUCCESSFUL'
-  // Default values
-  def colorName = 'RED'
-  def colorCode = '#FF0000'
-  def now = new Date()
-  // message
-  def subject = "${buildStatus}, Job: ${env.JOB_NAME} FRONTEND - Deployment Sequence: [${env.BUILD_NUMBER}] "
-  def summary = "${subject} - Check On: (${env.BUILD_URL}) - Time: ${now}"
-  def subject_email = "Spring boot Deployment"
-  def details = """<p>${buildStatus} JOB </p>
-    <p>Job: ${env.JOB_NAME} - Deployment Sequence: [${env.BUILD_NUMBER}] - Time: ${now}</p>
-    <p>Check console output at "<a href="${env.BUILD_URL}">${env.JOB_NAME}</a>"</p>"""
-
- /*
-  // Email notification
+def notifyBuild(String buildStatus = 'STARTED') {
+    // Definindo status padrão e cores de notificação
+    buildStatus = buildStatus ?: 'SUCCESSFUL'
+    def colorName = buildStatus == 'SUCCESSFUL' ? 'GREEN' : 'RED'
+    def now = new Date()
+    def subject = "${buildStatus} - Job: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}"
+    def details = """<p>${buildStatus} JOB</p>
+        <p>Job: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER} - Time: ${now}</p>
+        <p>Console output: "<a href="${env.BUILD_URL}">${env.JOB_NAME}</a>"</p>"""
+    
+    // Exemplo de notificação por e-mail (descomente para ativar)
+    /*
     emailext (
-         to: "leandro.ribeiro@kardbank.com.br",
-         subject: subject_email,
-         body: details,
-         recipientProviders: [[$class: 'DevelopersRecipientProvider']]
-       )*/
+        to: "leandro.ribeiro@kardbank.com.br",
+        subject: subject,
+        body: details,
+        recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+    )
+    */
 }
