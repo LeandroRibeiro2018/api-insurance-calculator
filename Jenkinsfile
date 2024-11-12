@@ -16,7 +16,7 @@ pipeline {
         stage('Iniciar Aplicação') {
             steps {
                 echo 'Iniciando a aplicação...'
-                bat 'java -jar target/SeuAplicativoSpringBoot.jar'
+                bat 'java -jar target/api-insurance-calculator.jar'
             }
         }
     }
